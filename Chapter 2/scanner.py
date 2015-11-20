@@ -1,7 +1,7 @@
 # Network scanner based on chapter 2
 # Python 3.4
 
-import optparse
+import argparse
 from socket import *
 
 # Function for connect on specific host/port
@@ -45,7 +45,7 @@ def portScan(tgtHost,tgtPorts):
         print("\n[+] Scan result for: " + tgtIP)
 
     # Set timeout for a new socket object
-    setdefaulttimeout(1)
+    setdefaulttimeout(3)
 
     # Loop for port scan
     for tgtPort in tgtPorts:
@@ -58,20 +58,17 @@ def portScan(tgtHost,tgtPorts):
 def main():
 
     # Define HELP menu
-    parser = optparse.OptionParser("Usage scanner.py -t " + "<target host> -p <target port>")
+    parser = argparse.ArgumentParser(description="Simple Python TCP scanner")
 
-    # Define menu options for target host
-    parser.add_option('-t', dest='tgtHost', type='string', help='Specify target host.')
+    parser.add_argument('Target', help="Target host.")
+    parser.add_argument('Ports', help="Target port[s] separated by comma.")
 
-    # Define menu options for target port[s]
-    parser.add_option('-p', dest='tgtPort', type='string', help='Specify target port[s] separated by comma.')
-
-    # Receive arguments from user
-    (options, args) = parser.parse_args()
-    tgtHost = options.tgtHost
+    # Receiving arguments from user
+    args = parser.parse_args()
+    tgtHost = args.Target
 
     # Split the ports using comma as separator
-    tgtPorts = str(options.tgtPort).split(', ')
+    tgtPorts = str(args.Ports).split(',')
 
     # If host or port are not set, print HELP and exit.
     if (tgtHost == None) | (tgtPorts[0] == None):
