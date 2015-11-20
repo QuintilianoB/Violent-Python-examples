@@ -5,7 +5,7 @@ import argparse
 import socket
 import threading
 
-# Define a value for the semaphore state used above.
+# Define a value for the semaphore state used bellow.
 # A good explanation on how Python's Multi-thread work:
 # http://www.laurentluce.com/posts/python-threads-synchronization-locks-rlocks-semaphores-conditions-events-and-queues/
 screenLock = threading.Semaphore(value=1)
