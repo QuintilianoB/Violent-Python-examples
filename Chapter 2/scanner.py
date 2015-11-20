@@ -5,8 +5,8 @@ import argparse
 import socket
 import threading
 
-# Define a value for the semaphore state used bellow.
-# A good explanation on how Python's Multi-thread work:
+# Define a value for the semaphore state used(ish) bellow.
+# A good explanation on how Python's Multi-thread work
 # http://www.laurentluce.com/posts/python-threads-synchronization-locks-rlocks-semaphores-conditions-events-and-queues/
 screenLock = threading.Semaphore(value=1)
 
@@ -14,21 +14,34 @@ screenLock = threading.Semaphore(value=1)
 # Function for connect on specific host/port
 def connScan(tgtHost, tgtPort):
 
+
     try:
         # Opens an IPv4(AF_INET) / TPC(SOCK_STREAM)
-        connSkt = socket(socket.AF_INET, socket.SOCK_STREAM)
+        connSkt = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         connSkt.connect((tgtHost,tgtPort))
 
         # After a successful connection, send a random string to host/port target and listen to an answer.
         connSkt.send("Random string =)\r\n")
         results = connSkt.recv(100)
 
+        # Here is where the threading starts to work.
+        # It blocks access to a specific resource, in this case the terminal screen, to other threads
+        # who should wait for a release before continue.
+        screenLock.acquire()
+
         print("[+]%d - tcp open" % tgtPort)
         print("[+]Server response: " + str(results))
-        connSkt.close()
 
     except:
+        # Again, before write to terminal, the process need to acquire the resource.
+        screenLock.acquire()
         print("[-]%d - tcp closed" % tgtPort)
+
+
+    finally:
+        # Finishing up by releasing the lock on screen and closing the connection with target host.
+        screenLock.release()
+        connSkt.close()
 
 
 # Function for port scan. Receive a host and a tuple of TCP ports.
@@ -56,7 +69,7 @@ def portScan(tgtHost,tgtPorts):
 
     # Loop for port scan
     for tgtPort in tgtPorts:
-        print("Scanning port - " + tgtPort)
+        print("Scanning port - %d" % tgtPort)
         connScan(tgtHost,int(tgtPort))
 
 
@@ -65,6 +78,7 @@ def portScan(tgtHost,tgtPorts):
 def main():
 
     # Define HELP menu
+    # Replaced the "optparse" for "argparse" since the first on is no longer maintained, as stated by Python's Docs.
     parser = argparse.ArgumentParser(description="Simple Python TCP scanner")
     parser.add_argument('Target', help="Target host.")
     parser.add_argument('Ports', help="Target port[s] separated by comma.")
