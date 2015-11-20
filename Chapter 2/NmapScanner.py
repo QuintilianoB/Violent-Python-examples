@@ -14,15 +14,17 @@ def nmapScan(tgtHost,tgtPort):
 
     # Initialize the nmap module and set target/port.
     nmScan = nmap.PortScanner()
-    print(tgtHost,tgtPort)
     nmScan.scan(tgtHost, tgtPort)
 
     # Return the scan status and print it for user.
     # Used Json as solution for an odd behavior of nmap when tried to print args as described in python-nmap docs.
     # It can't parse nmScan[tgtHost]['tcp'][tgtHost] or anything else after tcp.....
+    # This save me a lot o time https://pymotw.com/2/json/
+    temp = json.dumps(nmScan[tgtHost]['tcp'])
+    result = json.loads(temp)
 
-    temp = nmScan[tgtHost]['tcp']
-    print(temp)
+    # A different approach on print results.
+    print("Port tcp/{0} status: {1}".format(tgtPort,result[tgtPort]['state']))
 
 # An explanation about why use "main" and "if __name__ == __main__"
 # http://stackoverflow.com/questions/419163/what-does-if-name-main-do
@@ -46,6 +48,7 @@ def main():
             print(parser.usage)
             exit(0)
 
+    print("Scan results for {0}".format(tgtHost))
     for tgtPort in tgtPorts:
         nmapScan(tgtHost,tgtPort)
 
