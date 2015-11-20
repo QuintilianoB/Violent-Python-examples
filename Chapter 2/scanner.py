@@ -17,7 +17,7 @@ def connScan(tgtHost, tgtPort):
         results = connSkt.recv(100)
 
         print("[+]%d - tcp open" % tgtPort)
-        print("[+] " + str(results))
+        print("[+]Server response: " + str(results))
         connSkt.close()
 
     except:
@@ -67,8 +67,13 @@ def main():
     args = parser.parse_args()
     tgtHost = args.Target
 
-    # Split the ports using comma as separator
-    tgtPorts = str(args.Ports).split(',')
+    # Split the ports using comma as separator and validate if ports are INTEGER
+    try:
+        tgtPorts = map(int, str(args.Ports).split(','))
+
+    except:
+        print("Invalid port number")
+        exit(0)
 
     # If host or port are not set, print HELP and exit.
     if (tgtHost == None) | (tgtPorts[0] == None):
