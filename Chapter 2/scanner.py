@@ -6,14 +6,13 @@ import socket
 import threading
 
 # Define a value for the semaphore state used(ish) bellow.
-# A good explanation on how Python's Multi-thread work
+# An explanation on how Python's Multi-thread work:
 # http://www.laurentluce.com/posts/python-threads-synchronization-locks-rlocks-semaphores-conditions-events-and-queues/
 screenLock = threading.Semaphore(value=1)
 
 
 # Function for connect on specific host/port
 def connScan(tgtHost, tgtPort):
-
 
     try:
         # Opens an IPv4(AF_INET) / TPC(SOCK_STREAM)
@@ -36,7 +35,6 @@ def connScan(tgtHost, tgtPort):
         # Again, before write to terminal, the process need to acquire the resource.
         screenLock.acquire()
         print("[-]%d - tcp closed" % tgtPort)
-
 
     finally:
         # Finishing up by releasing the lock on screen and closing the connection with target host.
@@ -73,7 +71,7 @@ def portScan(tgtHost,tgtPorts):
         connScan(tgtHost,int(tgtPort))
 
 
-# Good explanation about why use "main" and "if __name__ == __main__"
+# An explanation about why use "main" and "if __name__ == __main__"
 # http://stackoverflow.com/questions/419163/what-does-if-name-main-do
 def main():
 
