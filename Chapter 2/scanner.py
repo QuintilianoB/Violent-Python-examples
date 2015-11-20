@@ -2,14 +2,21 @@
 # Python 3.4
 
 import argparse
-from socket import *
+import socket
+import threading
+
+# Define a value for the semaphore state used above.
+# A good explanation on how Python's Multi-thread work:
+# http://www.laurentluce.com/posts/python-threads-synchronization-locks-rlocks-semaphores-conditions-events-and-queues/
+screenLock = threading.Semaphore(value=1)
+
 
 # Function for connect on specific host/port
 def connScan(tgtHost, tgtPort):
 
     try:
         # Opens an IPv4(AF_INET) / TPC(SOCK_STREAM)
-        connSkt = socket(AF_INET, SOCK_STREAM)
+        connSkt = socket(socket.AF_INET, socket.SOCK_STREAM)
         connSkt.connect((tgtHost,tgtPort))
 
         # After a successful connection, send a random string to host/port target and listen to an answer.
@@ -29,7 +36,7 @@ def portScan(tgtHost,tgtPorts):
 
     try:
         # Returns the ip address (DNS resolver)
-        tgtIP = gethostbyname(tgtHost)
+        tgtIP = socket.gethostbyname(tgtHost)
 
     except:
         print("Fail at resolve hostname %s" % tgtHost)
@@ -38,14 +45,14 @@ def portScan(tgtHost,tgtPorts):
     try:
         # Return the true host name, a list of aliases, and a list of IP addresses, for a host.
         # The host argument is a string giving a host name or IP number.
-        tgtName = gethostbyaddr(tgtIP)
+        tgtName = socket.gethostbyaddr(tgtIP)
         print("\n[+] Scan result for: " + tgtName[0])
 
     except:
         print("\n[+] Scan result for: " + tgtIP)
 
     # Set timeout for a new socket object
-    setdefaulttimeout(3)
+    socket.setdefaulttimeout(3)
 
     # Loop for port scan
     for tgtPort in tgtPorts:
@@ -59,15 +66,14 @@ def main():
 
     # Define HELP menu
     parser = argparse.ArgumentParser(description="Simple Python TCP scanner")
-
     parser.add_argument('Target', help="Target host.")
     parser.add_argument('Ports', help="Target port[s] separated by comma.")
 
-    # Receiving arguments from user
+    # Receive arguments from user
     args = parser.parse_args()
     tgtHost = args.Target
 
-    # Split the ports using comma as separator and validate if ports are INTEGER
+    # Split the ports using comma as separator and validate if port(s) are integer.
     try:
         tgtPorts = map(int, str(args.Ports).split(','))
 
