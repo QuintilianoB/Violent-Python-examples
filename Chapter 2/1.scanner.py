@@ -75,14 +75,14 @@ def portScan(tgtHost,tgtPorts):
 # http://stackoverflow.com/questions/419163/what-does-if-name-main-do
 def main():
 
-    # Defines HELP menu
+    # Defines the options and the help menu.
     # I've replaced the "optparse" by "argparse"  because the first on is no longer maintained,
     # as stated by Python's Docs.
     parser = argparse.ArgumentParser(description="Simple Python TCP scanner")
     parser.add_argument('Target', help="Target host.")
     parser.add_argument('Ports', help="Target port[s] separated by comma.")
 
-    # Receives arguments from user
+    # Receives the arguments sent by the user.
     args = parser.parse_args()
     tgtHost = args.Target
 
@@ -94,7 +94,7 @@ def main():
         print("Invalid port number")
         exit(0)
 
-    # If host or port are not set, prints out HELP and exit.
+    # If anything is not set , prints the help menu from argparse and exits.
     if (tgtHost == None) | (tgtPorts[0] == None):
             print(parser.usage)
             exit(0)

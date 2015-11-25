@@ -81,19 +81,19 @@ def connect(host, user, password, release):
 
 def main():
 
-    # Defines options and help.
+    # Defines the options and the help menu.
     parser = argparse.ArgumentParser(description="Simple Python SSH Brute Force")
     parser.add_argument('Target', help="Target host.")
     parser.add_argument('User', help="User for ssh connection.")
     parser.add_argument('PassFile', help="File with a password per line.")
 
-    # Receives arguments from user
+    # Receives the arguments sent by the user.
     args = parser.parse_args()
     tgtHost = args.Target
     user = args.User
     passFile = args.PassFile
 
-    # If anything isn't set, prints the help from argparse and exits.
+    # If anything is not set , prints the help menu from argparse and exits.
     if tgtHost == None or user == None or passFile == None:
         print(parser.usage)
         exit(0)
