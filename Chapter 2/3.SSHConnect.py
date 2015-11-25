@@ -1,50 +1,52 @@
-# SSH connection with pexpect library based on chapter 2
+# SSH connection with the pexpect library based on chapter 2
 # Python 3.4
 
 # Pexpect is a tool for interacting with other applications, like ssh, sftp, etc.
-# It sends shell commands and works according with the output.
+# It sends shell commands and works according with its output.
 # See the docs at: https://pexpect.readthedocs.org/en/stable/
 import pexpect
 
 
-# I've created this function, as debug, to print with which user the script is being running.
+#  I've created this function, as debug, to print the user with which the script is being running.
 def running_user():
     user = pexpect.spawn('whoami')
     user.expect(pexpect.EOF)
     print(str(user.before))
 
-# Define the most commons terminals that should be expect from a successful connection.
+# Defines the most common terminals that should be expected from a successful connection.
 prompt = ['#','>>>','>','\$']
 
 
-# Define how the commands are send to the target host.
+# Defines how the commands are sent to the target host.
 def send_cmd (child, cmd):
-    # Send commands.
+    # Sends it.
     child.sendline(cmd)
-    # Expect on of those items on prompt list.
+    # Expects as return one of the items on prompt list.
     child.expect(prompt)
-    # Returns the output from child.sendline. Isn't pretty but I'll not spend time changing it now.
+    # Returns the output from child.sendline. Isn't pretty but I won't spend time with it now.
     print(child.before)
 
 
 # Define the connections for the target host.
 def connect(user, host, password):
 
-    # Define what should expect from a ssh connection to a new host, before the host be add to user's know_host list.
+    # Defines what should be expected as return from a ssh connection to a host if it
+    # wasn't located in the user's know_host list.
     ssh_newkey = 'Are you sure you want to continue'
     connStr = 'ssh ' + user + '@' + host
 
-    # The 'spawn' function execute the argument in the local shell. In this case, it starts a ssh connection.
+    # The 'spawn' function executes the argument in the local shell. In this case, it starts a ssh connection.
     child = pexpect.spawn(connStr)
 
-    # Set three possible expected returns from spawn command. A timeout, which indicates that the server is busy or we
-    # are blocked out. ssh_newkey indicates that the server is reachable and returns the connection request with its
-    # public key and finally Password or password as the ssh server wait's for password input.
+    # Sets three possible expected returns from 'spawn' command.
+    # A timeout, which indicates that the server is busy or that we are being blocked out by firewall and/or IDS.
+    # 'ssh_newkey' indicates that the server is reachable and returns the connection request with its public key for
+    # the first time and 'Password' or 'password' when the ssh server is waiting for a password.
     ret = child.expect([pexpect.TIMEOUT, ssh_newkey, '[P|p]assword:'])
     print(ret)
     print(child.before)
 
-    # It returns 0, 1 or 2, according with the list defined on child.expect.
+    # Returns 0, 1 or 2, according with the list defined on child.expect.
     # 0 - if returns a TIMEOUT
     # 1 - if it is a ssh_newkey
     # 2 - if it is the string [P|p]assword:
@@ -53,8 +55,8 @@ def connect(user, host, password):
         print('[-]Error connecting')
         return
 
-    # I couldn't simulate a new key connection. I've removed my local host form my own user know_host list but
-    # nevertheless every connection falls on case number 2.
+    # I couldn't simulate a new key connection. I've removed my know_host file, but even so,
+    # every connection falls on case 2, no matter if the connecting to a newly discovered host.
     if ret == 1:
         print("Teste")
         child.sendline('yes')

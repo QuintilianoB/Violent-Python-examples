@@ -1,7 +1,7 @@
-# Network scanner based on chapter 2 with nmap module
+    # Network scanner based on chapter 2 with nmap module
 # Python 3.4
-# Nmap module already utilize multi-threading (way better) than previous implemented here so there is no
-# need to use it.
+# The nmap module already utilizes multi-threading (way better) than the previous implemented here, so there is no need
+# to do it again.
 
 import argparse
 import nmap
@@ -12,18 +12,18 @@ import json
 # http://xael.org/pages/python-nmap-en.html
 def nmapScan(tgtHost,tgtPort):
 
-    # Initialize the nmap module and set target/port.
+    # Initializes the nmap module and set target/port.
     nmScan = nmap.PortScanner()
     nmScan.scan(tgtHost, tgtPort)
 
-    # Return the scan status and print it for user.
-    # Used Json as solution for an odd behavior of nmap when tried to print args as described in python-nmap docs.
-    # It can't parse nmScan[tgtHost]['tcp'][tgtHost] or anything else after tcp.....
-    # This save me a lot o time https://pymotw.com/2/json/
+    # Return the scan status and return it for user.
+    # Used Json as solution for an odd behavior of nmap when tryed to print 'args', as described in python-nmap docs.
+    # It don't returns nmScan[tgtHost]['tcp'][tgtHost] or anything else after ['tcp'].....
+    # This saved me a lot o time https://pymotw.com/2/json/
     temp = json.dumps(nmScan[tgtHost]['tcp'])
     result = json.loads(temp)
 
-    # A different approach on print results.
+    # A different approach for print.
     print("Port tcp/{0} status: {1}".format(tgtPort,result[tgtPort]['state']))
 
 # An explanation about why use "main" and "if __name__ == __main__"
@@ -31,19 +31,20 @@ def nmapScan(tgtHost,tgtPort):
 def main():
 
     # Define HELP menu
-    # Replaced the "optparse" for "argparse" since the first on is no longer maintained, as stated by Python's Docs.
+    # I've replaced the "optparse" by "argparse"  because the first on is no longer maintained,
+    # as stated by Python's Docs.
     parser = argparse.ArgumentParser(description="Simple Python TCP scanner with python-nmap module")
     parser.add_argument('Target', help="Target host.")
     parser.add_argument('Ports', help="Target port[s] separated by comma.")
 
-    # Receive arguments from user
+    # Receives arguments from user
     args = parser.parse_args()
     tgtHost = args.Target
 
-    # Split the ports using comma as separator. Nmap expects the ports as string so no str->int conversion here.
+    # Splits the ports using comma as separator. The nmap expects 'port' as string, so no str->int conversion here.
     tgtPorts = str(args.Ports).split(',')
 
-    # If host or port are not set, print HELP and exit.
+    # If host or port are not set, prints out HELP and exit.
     if (tgtHost == None) | (tgtPorts[0] == None):
             print(parser.usage)
             exit(0)
