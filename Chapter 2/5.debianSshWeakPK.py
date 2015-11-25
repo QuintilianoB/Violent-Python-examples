@@ -1,5 +1,17 @@
 # SSH brute force with pxssh class and keyfile, based on chapter 2
 # Python 3.4
+
+"""
+
+ Another example of this script: https://www.exploit-db.com/exploits/5720/
+ The 32768 keys can be found here: https://github.com/g0tmi1k/debian-ssh
+ The exploit CVE: http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2008-0166
+
+ For this works, you must have a Debian distro with an vulnerable version of Openssl.
+ I've tested it with version 0.9.8g-9.
+
+"""
+
 import pexpect
 import argparse
 import os
