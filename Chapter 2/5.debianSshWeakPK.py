@@ -8,7 +8,10 @@
  The exploit CVE: http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2008-0166
 
  For this works, you must have a Debian distro with an vulnerable version of Openssl.
- I've tested it with version 0.9.8g-9.
+ I've tested it with version 0.9.8g
+ Download links:
+    1 Ubuntu pkg- https://launchpad.net/ubuntu/+source/openssl/0.9.8b-2ubuntu2.1
+    2 Source - https://www.openssl.org/source/old/0.9.x/openssl-0.9.8b.tar.gz
 
 """
 
