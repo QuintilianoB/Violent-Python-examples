@@ -70,6 +70,7 @@ def connect(user, host, password):
     child.expect(prompt)
     return child
 
+
 def main():
     running_user()
     host = 'localhost'

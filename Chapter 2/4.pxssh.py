@@ -114,8 +114,8 @@ def main():
                 print("[-]Too many socket timeouts...exiting")
                 exit(1)
 
-                # For each connection attempt, it will reserve a resource before run. If no ( maxConnections ) resource
-                # is available, it will wait until a release occurs.
+            # For each connection attempt, it will reserve a resource before run. If no ( maxConnections ) resource
+            # is available, it will wait until a release occurs.
             connection_lock.acquire()
 
             # Removes spaces and line breaks before pass it as argument.
