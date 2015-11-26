@@ -53,6 +53,7 @@ def connect(host, user, password, release):
         print("[+]Password found: {0}".format(password))
         Found = True
 
+    # For python 3.4 there been a change in how exceptions must be handled.
     except Exception as error:
 
         # The errors defined here are created by the pxssh class and not by the ssh server.
