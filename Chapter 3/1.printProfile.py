@@ -2,7 +2,7 @@
 # Python 3.4
 
 """
-
+    A script for query on Skype Database.
     The default location of Skype's main.db on linux is:
 
             /home/$LINUX_USER_NAME/.Skype/$SKYPE_USER_NAME
