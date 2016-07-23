@@ -1,3 +1,15 @@
+# SQLite connection with python based on chapter 3.
+# Python 3.4
+
+"""
+    A script for query on Firefox Database.
+    The default location of Firefox's sqlite db's:
+
+            /home/$LINUX_USER_NAME/.mozilla/Firefox/$FIREFOX_PROFILE
+
+"""
+
+
 import re
 import argparse
 import os

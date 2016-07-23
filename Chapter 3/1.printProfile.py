@@ -102,7 +102,7 @@ def printMessages(skypeDB):
 
 def main():
 
-     # Defines the options and the help menu.
+    # Defines the options and the help menu.
     parser = argparse.ArgumentParser(description="A Python SQLite parser for skype DB.")
     parser.add_argument('DBfile', help="Skypes profile location.")
 
